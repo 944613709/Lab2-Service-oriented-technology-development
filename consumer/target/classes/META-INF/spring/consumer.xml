@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application name="consumer" owner="programmer" organization="dubbox"/>
+    <!--zookeeper注册中心地址-->
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+    <!-- 生成远程服务代理，可以像使用本地bean一样使用demoService -->
+    <!--消费者订阅的服务, 默认情况下需要先发布服务才能订阅, 通过添加check="false"可以直接订阅任意服务,只是调用时需要注意判断是否可用-->
+    <dubbo:reference id="userRestService" interface="com.hit.lyx.dubbo.demo.api.service.UserRestService"/>
+
+    <dubbo:reference id="userService" interface="com.hit.lyx.dubbo.demo.api.service.UserService"/>
+
+    <dubbo:reference id="house" interface="com.hit.lyx.dubbo.demo.api.service.House"/>
+    <dubbo:reference id="houseManager" interface="com.hit.lyx.dubbo.demo.api.service.HouseManager"/>
+    <dubbo:reference id="userManager" interface="com.hit.lyx.dubbo.demo.api.service.UserManager"/>
+    <dubbo:reference id="utilData" interface="com.hit.lyx.dubbo.demo.api.service.UtilData"/>
+
+
+</beans>

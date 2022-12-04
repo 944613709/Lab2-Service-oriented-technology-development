@@ -1,0 +1,5 @@
+com\hit\lyx\dubbo\demo\api\service\House.class
+com\hit\lyx\dubbo\demo\api\service\UserService.class
+com\hit\lyx\dubbo\demo\api\service\UserRestService.class
+com\hit\lyx\dubbo\demo\api\entity\User.class
+com\hit\lyx\dubbo\demo\api\common\SerializationOptimizerImpl.class

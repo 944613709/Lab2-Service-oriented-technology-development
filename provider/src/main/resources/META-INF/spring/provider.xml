@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--应用名,用于dubbo控制中心区分不同的应用-->
+    <dubbo:application name="provider" owner="programmer" organization="dubbox">
+        <dubbo:parameter key="qos.enable" value="true"/>
+        <dubbo:parameter key="qos.accept.foreign.ip" value="false"/>
+        <dubbo:parameter key="qos.port" value="33333"/>
+    </dubbo:application>
+
+    <!--zookeeper注册中心, 多地址间用","隔开 -->
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+
+    <!--定义协议-->
+    <dubbo:protocol name="dubbo" serialization="kryo"
+                    optimizer="com.hit.lyx.dubbo.demo.api.common.SerializationOptimizerImpl"/>
+    <!-- 使用rest协议时, 用port指明服务端口, contextpath指明服务根目录 -->
+    <dubbo:protocol name="rest" port="8888" threads="500"
+                    contextpath="services" server="tomcat" accepts="500"
+                    extension="com.alibaba.dubbo.rpc.protocol.rest.support.LoggingFilter"/>
+
+    <!--服务提供者以dubbo协议发布服务-->
+    <dubbo:service interface="com.hit.lyx.dubbo.demo.api.service.UserService"
+                   ref="userService" protocol="dubbo"/>
+    <!--服务提供者发布rest服务-->
+    <dubbo:service interface="com.hit.lyx.dubbo.demo.api.service.UserRestService"
+                   ref="userRestService" protocol="rest"
+                   validation="true"/>
+
+    <dubbo:service interface="com.hit.lyx.dubbo.demo.api.service.House"
+                   ref="house" protocol="dubbo"/>
+    <dubbo:service interface="com.hit.lyx.dubbo.demo.api.service.HouseManager"
+                   ref="houseManager" protocol="dubbo"/>
+    <dubbo:service interface="com.hit.lyx.dubbo.demo.api.service.UserManager"
+                   ref="userManager" protocol="dubbo"/>
+    <dubbo:service interface="com.hit.lyx.dubbo.demo.api.service.UtilData"
+                   ref="utilData" protocol="dubbo"/>
+
+
+    <!--普通的spring bean-->
+    <bean id="userService" class="com.hit.lyx.dubbo.demo.service.UserServiceImpl"/>
+    <bean id="house" class="com.hit.lyx.dubbo.demo.service.HouseImpl"/>
+    <bean id="houseManager" class="com.hit.lyx.dubbo.demo.service.HouseManagerImpl"/>
+    <bean id="userManager" class="com.hit.lyx.dubbo.demo.service.UserManagerImpl"/>
+    <bean id="utilData" class="com.hit.lyx.dubbo.demo.service.UtilDataImpl"/>
+    <bean id="userRestService" class="com.hit.lyx.dubbo.demo.service.UserRestServiceImpl">
+        <property name="userService" ref="userService"/>
+    </bean>
+</beans>
